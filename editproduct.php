@@ -138,6 +138,7 @@
                         
                         <div class="col-md-offset-3">
                         <input type="hidden" name="hdnproduct" value="<?php  echo $prd->id;?>">
+                        <input type="hidden" name="tphdnproductic" value="<?php echo $prd->picture;?>">
                            <button type="submit" class="btn btn-primary">Save</button>
                            <button type="submit" class="btn btn-danger">Reset</button>
 

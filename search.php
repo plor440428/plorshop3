@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>plorshop</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <
+    
 </head>
 
 <body>
@@ -87,77 +87,75 @@
         </div>
     </nav>
     <div class="container">
-        <div class="jumbotron">
-            <h1>plorshop</h1>
-            <p class="lead">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo distinctio quis mollitia
-                ad optio quo modi quae consectetur quam eos ipsam cumque officia nostrum enim necessitatibus inventore
-                unde, maiores possimus?</p>
-        </div>
-    </div>
-    <div class="container">
         <div class="row">
-            <?php
-        $sql="SELECT * FROM product ORDER BY id";
-        $result=$conn->query($sql);
-        if(!$result){
-
-
-            echo"Error during data retrievel";
-        }
-        else{
-
-            while($prd= $result->fetch_object()){
-               
-                ?>
-            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                <div class="thumbnail">
-                    <a href="productdatail.php?pid=<?php echo $prd->id ;?>">
-                        <img src="product/<?php echo $prd->picture; ?>" alt="">
-                    </a>
-                    <h3><?php echo $prd->name; ?></h3>
-                    <p>Price:<?php echo $prd->price; ?></p>
-
-                    <a href="#" class="btn btn-success">Add to basekeat</a>
-                    <a href="editproduct.php?pid=<?php echo $prd->id  ?>"class="btn btn-warning"><i class="glyphicon glyphicon-heart" ></i></a>
-                    <a href="deletproduct.php?pid=<?php echo $prd->id  ?>"class="btn btn-danger linkdelete"><i class="glyphicon glyphicon-piggy-bank" ></i></a>
-
-                </div>
-
-
+            <h2>Search Product</h2>
+            <div class="col-md-12">
+            <form action="" method="post">
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" name="txtsearch" placeholder="ราคาต่ำสุด">
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" name="txtsearch2" placeholder="ราคาสูงสุด">
+                        </div>
+                        <div class="col-md-2">
+                            <button name="submit" class="btn btn-block btn-success">
+                                <i class="glyphicon glyphicon-search"></i> Go!
+                            </button>
+                        </div>
+                    </div>
+            </form>
             </div>
-            <?php
-            }
-        }
-        
-        
-        ?>
-
-
-
         </div>
     </div>
 
 
-    </div>
+    <?php
+        if(isset($_POST['submit'])){  
+            $search = $_POST['txtsearch'];
+            $search2 = $_POST['txtsearch2'];
+            $sql = "SELECT * FROM product WHERE price BETWEEN '$search' AND '$search2'";
+    ?>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2" style="margin-top:50px;">
+            <h3><?php echo "ผลการค้นหา : ".$search." - ".$search2; ?></h3>
+            <?php
+            $result = $conn->query($sql);
+            
+                if(!$result){
+                    echo "Error during data retrieval";
+                }
+                else{
+                    //fetch data
+                    while($prd = $result->fetch_object()){
+                        ?>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="thumbnail">
+                        <a href="productdetail.php?pid=<?php echo $prd->id; ?>">
+                            <img src="img/product/<?php echo $prd->picture ?>" alt="">
+                        </a>
+                        <div class="caption">
+                            <h3><?php echo $prd->name ?></h3>
+                            <p><?php echo $prd->description ?></p>
+                            <h4>Price : <?php echo $prd->price ?> Baht</h4>
+                        </div>
+                            <p>
+                            <a href="#" class="btn btn-success"><i class="glyphicon glyphicon-shopping-cart"></i> Add To Cart.</a>
+                            <a href="editproduct.php?pid=<?php echo $prd->id ?>" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                            <a href="deleteproduct.php?pid=<?php echo $prd->id ?>" class="btn btn-danger lnkDelete" ><i class="glyphicon glyphicon-trash"></i></a>
+                            </p>
+                    </div>
+                </div>
+                        <?php
+                    }
+                }
+            ?>
+            </div>
+        </div>
 
-    <script src="js/jquery-3.4.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script >
-    $(document).ready(function(){
-    $(".linkdelete").click(function(){
-
-        if (confirm("confirm delete")){
-            return true;
-        }
-        else{
-            return false;
-        }
-       
-    });
-    });
-    </script>
-
-
+    <?php
+        }   
+    ?>
+  
 </body>
-
 </html>
